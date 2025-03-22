@@ -12,128 +12,72 @@ class MovieListPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Movie List"),
       ),
-      body: ListView(
-        children: movieList.map((movie) {
-          return MovieContainer(movie: movie);
-        }).toList(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+        child: ListView(
+          children: movieList.map((movie) {
+            return MovieContainer(movie: movie);
+          }).toList(),
+        ),
       ),
     );
   }
 }
 
-
-// class MovieContainer extends StatefulWidget {
-//   final MovieModel movie;
-//   MovieContainer({super.key, required this.movie});
-
-//   @override
-//   State<MovieContainer> createState() => _MovieContainerState();
-// }
-
-// class _MovieContainerState extends State<MovieContainer> {
-//   bool isBookmarked = false;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Padding(
-//           padding: EdgeInsets.all(30.0),
-//           child: ElevatedButton(
-//             style: ElevatedButton.styleFrom(
-//               shape: RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(10)
-//               ),
-//             ),
-//             onPressed: (){
-//               Navigator.of(context).push(MaterialPageRoute(
-//                 builder: (context)=>MovieDetailPage(movie: widget.movie)
-//               ));
-//             },
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Image.network(widget.movie.imgUrl, width: 100,),
-//                 Column(
-//                   children: [
-//                     ListView(
-//                       scrollDirection: Axis.horizontal,
-//                       children: [
-//                         Text(widget.movie.title + " (" + widget.movie.year.toString() + ")",),
-//                       ],
-//                     ),
-//                     Text(widget.movie.genre),
-//                     Row(
-//                       children: [
-//                         Text(widget.movie.rating.toString()),
-//                         Icon(Icons.star, color: Colors.yellow),
-//                       ],
-//                     )
-//                   ],
-//                 ),
-//                 IconButton(
-//                   icon: Icon(
-//                     isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-//                     color: isBookmarked ? Colors.blue : Colors.black,
-//                   ),
-//                   onPressed: () {
-//                     setState(() {
-//                       isBookmarked = !isBookmarked;
-//                     });
-//                   },
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
 class MovieContainer extends StatelessWidget {
-  MovieModel movie;
-  MovieContainer({super.key, required this.movie});
+  final MovieModel movie;
+  const MovieContainer({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.all(30.0),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)
-              ),
-            ),
-            onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context)=>MovieDetailPage(movie: movie)
-              ));
-            },
+        InkWell(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MovieDetailPage(movie: movie)));
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(12)),
+            padding: EdgeInsets.all(12),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(movie.imgUrl, width: 100,),
-                Column(
-                  children: [
-                    Text(movie.title + " (" + movie.year.toString() + ")"),
-                    Text(movie.genre),
-                    Row(
-                      children: [
-                        Text(movie.rating.toString()),
-                        Icon(Icons.star, color: Colors.yellow),
-                      ],
-                    )
-                  ],
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: Image.network(
+                    movie.imgUrl,
+                    width: 100,
+                  ),
                 ),
-                Icon(Icons.bookmark_border, color:Colors.black,),
-                Icon(Icons.bookmark, color:Colors.blue,),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("${movie.title} (${movie.year})"),
+                      Text(movie.genre),
+                      Row(
+                        children: [
+                          Text(movie.rating.toString()),
+                          Icon(Icons.star, color: Colors.yellow),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(width: 4),
+                Icon(
+                  Icons.bookmark_border,
+                  color: Colors.black,
+                ),
               ],
             ),
           ),
         ),
+        const SizedBox(height: 12)
       ],
     );
   }
